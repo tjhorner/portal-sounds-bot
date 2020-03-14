@@ -10,7 +10,7 @@ on:
       - v*
 
 env:
-  IMAGE_NAME: bot
+  IMAGE_NAME: portal-sounds-bot
 
 jobs:
   # Push image to GitHub Package Registry.
