@@ -67,7 +67,7 @@ func main() {
 		for _, sound := range sounds {
 			res := tgbotapi.NewInlineQueryResultAudio(
 				sound.ID,
-				sound.Link(),
+				sound.Link(useSubdomain),
 				sound.Who,
 			)
 

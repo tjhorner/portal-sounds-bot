@@ -19,9 +19,22 @@ type Sound struct {
 	Folder    string `json:"folder"`
 }
 
-func (s *Sound) Link() string {
+var cdnLinkMap = map[string]string{
+	"www":      "sound",
+	"dlc":      "sound_dlc1",
+	"dlc2":     "sound_dlc2",
+	"p2music":  "music_portal2",
+	"p1":       "sound_portal1",
+	"p1music":  "music_portal1",
+	"tf2":      "sound_tf2",
+	"tf2music": "tf2_songs",
+}
+
+func (s *Sound) Link(subdomain string) string {
+	folder := cdnLinkMap[subdomain]
 	return fmt.Sprintf(
-		"https://cdn.frustra.org/sounds/sound/%s/%s.mp3?id=%s",
+		"https://cdn.frustra.org/sounds/%s/%s/%s.mp3?id=%s",
+		folder,
 		s.Folder,
 		strings.ReplaceAll(s.ValveID, ".", "/"),
 		s.ID,
