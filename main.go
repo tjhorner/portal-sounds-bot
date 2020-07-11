@@ -3,9 +3,31 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
+
+// First is the default
+var allowedSubdomains = []string{
+	"www",
+	"dlc",
+	"dlc2",
+	"p2music",
+	"p1",
+	"p1music",
+	"tf2",
+	"tf2music",
+}
+
+func subdomainAllowed(subdomain string) bool {
+	for _, a := range allowedSubdomains {
+		if a == subdomain {
+			return true
+		}
+	}
+	return false
+}
 
 func main() {
 	tok := os.Getenv("BOT_TOKEN")
@@ -27,9 +49,18 @@ func main() {
 			continue
 		}
 
+		useSubdomain := allowedSubdomains[0]
+		query := update.InlineQuery.Query
+
+		split := strings.Split(update.InlineQuery.Query, ":")
+		if len(split) == 2 && subdomainAllowed(strings.TrimSpace(split[0])) {
+			useSubdomain = strings.TrimSpace(split[0])
+			query = strings.TrimSpace(split[1])
+		}
+
 		sounds := GetSounds(SoundFilterOptions{
-			Quote: update.InlineQuery.Query,
-		}, 1)
+			Quote: query,
+		}, useSubdomain, 1)
 
 		var results []interface{}
 

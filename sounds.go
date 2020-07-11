@@ -39,7 +39,7 @@ type SoundQuery struct {
 	UnknownParameter string `url:"s"`
 }
 
-func GetSounds(opts SoundFilterOptions, page int) []Sound {
+func GetSounds(opts SoundFilterOptions, subdomain string, page int) []Sound {
 	q := SoundQuery{
 		SoundFilterOptions: opts,
 		Page:               page,
@@ -47,7 +47,7 @@ func GetSounds(opts SoundFilterOptions, page int) []Sound {
 	}
 
 	v, _ := query.Values(q)
-	url := fmt.Sprintf("http://www.portal2sounds.com/list.php?%s", v.Encode())
+	url := fmt.Sprintf("http://%s.portal2sounds.com/list.php?%s", subdomain, v.Encode())
 
 	req, _ := http.NewRequest("POST", url, nil)
 	resp, _ := http.DefaultClient.Do(req)
